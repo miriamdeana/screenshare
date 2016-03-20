@@ -1,0 +1,53 @@
+<div id='home'>
+  <form onsubmit="sendInvite()" data-remote="true">
+
+    <label>Enter e-mail to invite!</label>
+    <input type="email" id="email-input" />
+
+    <br/>
+    <input type="submit" value="Submit"/>
+  </form>
+
+  <h1 id='success'> Your invitation has been sent! </h1>
+</div>
+
+<div id='accepted'>
+  <h1 id='accepted-title'> You will now join the meeting. </h1>
+
+  LOADING PRESENTATION ...
+</div>
+
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    var page = ('<%= @page %>');
+
+    if (page === 'accepted'){
+      $('#home').hide();
+    } else {
+      $('#email-input').focus();
+      $('#success').hide();
+      $('#accepted').hide();
+    }
+  });
+
+  function sendInvite() {
+    $.ajax({
+      url: "/api/invitations",
+      data: "email=" + $('#email-input').val(),
+      method: "post"
+    }).done(function() {
+      showSuccessMessage();
+    });
+
+    return false;
+  }
+
+  function showSuccessMessage() {
+    $('form').hide();
+    $('#success').show();
+
+    return false;
+  }
+</script>
